@@ -582,6 +582,8 @@ https://github.com/networkupstools/nut/milestone/13
       are not yet confirmed. [issue #3613, PR #3730]
 
  - `snmp-ups` driver updates:
+    * APC mapping: report software bypass as `BYPASS` instead of
+      `OFF`, avoiding false output-off shutdown decisions by `upsmon`.
     * APC mapping: corrected shutdown and startup delay scaling
       so reported and configured delays match the device delays in seconds.
     * Fixed a NULL pointer dereference when setting exact outlet mappings

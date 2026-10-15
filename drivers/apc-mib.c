@@ -26,7 +26,7 @@
 
 #include "apc-mib.h"
 
-#define APCC_MIB_VERSION	"1.63"
+#define APCC_MIB_VERSION	"1.64"
 
 #define APC_UPS_DEVICE_MODEL	".1.3.6.1.4.1.318.1.1.1.1.1.1.0"
 /* FIXME: Find a better oid_auto_check vs. sysOID for this one? */
@@ -80,7 +80,7 @@ static info_lkp_t apcc_pwr_info[] = {
 	info_lkp_default(3, "OB"),	/* onBattery */
 	info_lkp_default(4, "OL BOOST"),	/* onSmartBoost */
 	info_lkp_default(5, "OFF"),	/* timedSleeping */
-	info_lkp_default(6, "OFF"),	/* softwareBypass  */
+	info_lkp_default(6, "BYPASS"),	/* softwareBypass  */
 	info_lkp_default(7, "OFF"),	/* off */
 	info_lkp_default(8, ""),	/* rebooting */
 	info_lkp_default(9, "BYPASS"),	/* switchedBypass */
