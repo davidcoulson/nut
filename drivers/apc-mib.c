@@ -26,7 +26,7 @@
 
 #include "apc-mib.h"
 
-#define APCC_MIB_VERSION	"1.62"
+#define APCC_MIB_VERSION	"1.63"
 
 #define APC_UPS_DEVICE_MODEL	".1.3.6.1.4.1.318.1.1.1.1.1.1.0"
 /* FIXME: Find a better oid_auto_check vs. sysOID for this one? */
@@ -231,8 +231,8 @@ static snmp_info_t apcc_mib[] = {
 	snmp_info_default("ups.load", 0, 0.1, ".1.3.6.1.4.1.318.1.1.1.4.3.3.0", "", SU_FLAG_OK|SU_FLAG_NEGINVALID|SU_FLAG_UNIQUE, NULL),
 	snmp_info_default("ups.load", 0, 1, ".1.3.6.1.4.1.318.1.1.1.4.2.3.0", "", SU_FLAG_OK, NULL),
 	snmp_info_default("ups.firmware", ST_FLAG_STRING, 16, ".1.3.6.1.4.1.318.1.1.1.1.2.1.0", "", SU_FLAG_STATIC | SU_FLAG_OK, NULL),
-	snmp_info_default("ups.delay.shutdown", ST_FLAG_RW, 3, ".1.3.6.1.4.1.318.1.1.1.5.2.10.0", "", SU_TYPE_TIME | SU_FLAG_OK, NULL),
-	snmp_info_default("ups.delay.start", ST_FLAG_RW, 3, ".1.3.6.1.4.1.318.1.1.1.5.2.9.0", "", SU_TYPE_TIME | SU_FLAG_OK, NULL),
+	snmp_info_default("ups.delay.shutdown", ST_FLAG_RW, 1, ".1.3.6.1.4.1.318.1.1.1.5.2.10.0", "", SU_TYPE_TIME | SU_FLAG_OK, NULL),
+	snmp_info_default("ups.delay.start", ST_FLAG_RW, 1, ".1.3.6.1.4.1.318.1.1.1.5.2.9.0", "", SU_TYPE_TIME | SU_FLAG_OK, NULL),
 	snmp_info_default("battery.charge", 0, 0.1, ".1.3.6.1.4.1.318.1.1.1.2.3.1.0", "", SU_FLAG_OK|SU_FLAG_NEGINVALID|SU_FLAG_UNIQUE, NULL),
 	snmp_info_default("battery.charge", 0, 1, ".1.3.6.1.4.1.318.1.1.1.2.2.1.0", "", SU_FLAG_OK, NULL),
 	snmp_info_default("battery.charge.restart", ST_FLAG_STRING | ST_FLAG_RW, 3, ".1.3.6.1.4.1.318.1.1.1.5.2.6.0", "", SU_TYPE_INT | SU_FLAG_OK, NULL),
