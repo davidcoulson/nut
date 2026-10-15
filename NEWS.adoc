@@ -44,6 +44,9 @@ https://github.com/networkupstools/nut/milestone/13
  - Second-level bullet points listed in this file will now use 4 spaces
    (not 3 like before) for easier initial indentation of new entries.
 
+ - `apcsmart`: accept and validate hexadecimal status replies during shutdown
+   so an online UPS uses the appropriate shutdown method after mains returns.
+
  - Fix fallout of development in NUT v2.8.0 through v2.8.5:
     * `libnutconf`: character reads from a TCP socket now use the Windows
       socket API, matching string reads. Previously they failed with a bad

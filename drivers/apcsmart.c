@@ -38,7 +38,7 @@
 #include "apcsmart_tabs.h"
 
 #define DRIVER_NAME	"APC Smart protocol driver"
-#define DRIVER_VERSION	"3.40"
+#define DRIVER_VERSION	"3.41"
 
 #ifdef WIN32
 # ifndef ECANCELED
@@ -1859,6 +1859,7 @@ void upsdrv_shutdown(void)
 	 * general handling of other `sdcommands` here */
 
 	char	temp[APC_LBUF];
+	ssize_t	ret;
 
 	if (!smartmode(1))
 		upslogx(LOG_WARNING, "%s: %s", __func__, "setting SmartMode failed !");
@@ -1866,7 +1867,9 @@ void upsdrv_shutdown(void)
 	/* check the line status */
 
 	if (apc_write(APC_STATUS) == 1) {
-		if (apc_read(temp, sizeof(temp), SER_D1) == 1) {
+		ret = apc_read(temp, sizeof(temp), SER_D1);
+		if (ret >= 1 && ret <= 2
+		 && strspn(temp, "0123456789abcdefABCDEF") == (size_t)ret) {
 			ups_status = strtol(temp, 0, 16);
 		} else {
 			upslogx(LOG_WARNING, "%s: %s", __func__, "status read failed, assuming LB+OB");
