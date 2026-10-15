@@ -603,6 +603,12 @@ https://github.com/networkupstools/nut/milestone/13
       from the APC ATS output phase table, which also provides
       `output.voltage` on models without the output bank table, such as
       the AP4452A.
+    * `apc-ats` subdriver: report faults from the ATS device status
+      (lost redundancy, source failure, transfer switch, hardware, internal
+      power supply and fuse failures, sources out of sync, lost
+      communication) in `ups.alarm`, and set `OVER` on output over-current.
+      Previously these were only available as unmapped data points, so the
+      device reported `OL` with no alarm while one of its sources was down.
 
  - `upsdrvctl` tool updates:
     * Previously when looping to start a driver (and initially failing), we
