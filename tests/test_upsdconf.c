@@ -11,6 +11,7 @@
 #include "config.h"
 #include "conf.c"
 #include "sstate.c"
+#include "user.c"
 
 static int failures = 0, checks = 0;
 static const char *listen_host = NULL, *listen_port = NULL;
@@ -59,8 +60,6 @@ void kick_login_clients(const char *name)
 }
 
 void close_oldest_client(void) { unexpected_call("close_oldest_client"); }
-void user_flush(void) { unexpected_call("user_flush"); }
-void user_load(void) { unexpected_call("user_load"); }
 
 int tracking_set(const char *id, const char *value)
 {
@@ -76,6 +75,41 @@ char *tracking_get(const char *id)
 	NUT_UNUSED_VARIABLE(id);
 	unexpected_call("tracking_get");
 	return result;
+}
+
+/* Repeated sections must not attach settings to the preceding user. */
+static void check_duplicate_user(void)
+{
+	PCONF_CTX_t ctx;
+	size_t i;
+	const char *lines[] = {
+		"[admin]", "password = adminpass",
+		"[reader]", "password = readerpass", "upsmon secondary",
+		"[admin]", "password = wrongpass", "actions = SET",
+		"instcmds = ALL", "upsmon primary",
+		"[other]", "password = otherpass", "actions = SET"
+	};
+
+	pconf_init(&ctx, upsd_user_err);
+	for (i = 0; i < sizeof(lines) / sizeof(lines[0]); i++) {
+		pconf_line(&ctx, lines[i]);
+		user_parse_arg(ctx.numargs, ctx.arglist);
+	}
+	pconf_finish(&ctx);
+	checks++;
+	if (!user_checkaction("reader", "readerpass", "login")
+	 || user_checkaction("reader", "readerpass", "SET")
+	 || user_checkaction("reader", "readerpass", "fsd")
+	 || user_checkinstcmd("reader", "readerpass", "load.off")
+	 || user_checkaction("admin", "adminpass", "SET")
+	 || user_checkinstcmd("admin", "adminpass", "load.off")
+	 || !user_checkaction("other", "otherpass", "SET")
+	 || strcmp(users->password, "adminpass")
+	 || strcmp(((ulist_t *)users->next)->password, "readerpass")) {
+		upslogx(LOG_ERR, "FAIL duplicate user section isolation");
+		failures++;
+	}
+	user_flush();
 }
 
 static char config_dir[128], config_file[160];
@@ -334,6 +368,7 @@ int main(void)
 	}
 	free(ups.name);
 #endif
+	check_duplicate_user();
 	printf("%d checks, %d failures\n", checks, failures);
 	return failures ? EXIT_FAILURE : EXIT_SUCCESS;
 }

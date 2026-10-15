@@ -50,7 +50,8 @@ static void user_add(const char *un)
 		last = tmp;
 
 		if (!strcmp(tmp->username, un)) {
-			fprintf(stderr, "Ignoring duplicate user %s\n", un);
+			upslogx(LOG_WARNING, "Ignoring duplicate user %s and its settings", un);
+			curr_user = NULL;
 			return;
 		}
 	}

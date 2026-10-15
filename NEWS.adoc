@@ -822,6 +822,8 @@ https://github.com/networkupstools/nut/milestone/13
     * Added a `clean_exit()` handler similar to that in `upsmon`. [PR #3499]
 
  - `upsd` data server updates:
+    * ignore settings in duplicate user sections instead of applying
+      them to the preceding user.
     * Validate complete numeric values and conversion ranges for `MAXAGE`,
       `TRACKINGDELAY`, `MAXCONN` and `CERTREQUEST` in `upsd.conf`, retaining
       the previous setting when conversion fails. Preserve public types
